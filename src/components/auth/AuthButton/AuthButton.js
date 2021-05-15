@@ -1,11 +1,13 @@
 import { Link } from 'react-router-dom';
 import T from 'prop-types';
-
+import { connect } from 'react-redux';
 import { ConfirmationButton } from '../../shared';
-import { AuthConsumer } from '../context';
-import { logout } from '../../../api/auth';
 
-const AuthButton = ({ handleLogout, isLogged }) => {
+import { logout } from '../../../api/auth';
+import { getIsLogged } from '../../../store/selectors';
+import { authLogout } from '../../../store/actions';
+
+const AuthButton = ({ handleLogout, isLogged, onLogout }) => {
   const handleLogoutConfirm = async () => {
     await logout();
     handleLogout();
@@ -32,8 +34,8 @@ AuthButton.defaultProps = {
   isLogged: false,
 };
 
-const ConnectedAuthButton = props => (
-  <AuthConsumer>{auth => <AuthButton {...auth} {...props} />}</AuthConsumer>
-);
+const mapDispatchToProps = dispatch => ({onLogout: () =>  dispatch(authLogout)});
+const mapStateToProps = state => ({ isLogged: getIsLogged(state)});
 
-export default ConnectedAuthButton;
+
+export default connect(mapStateToProps, mapDispatchToProps)(AuthButton);

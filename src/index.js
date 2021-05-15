@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
 import configureStore from './store';
+import { Provider } from 'react-redux';
 
 import { configureClient } from './api/client';
 import storage from './utils/storage';
@@ -13,13 +14,15 @@ const accessToken = storage.get('auth');
 configureClient({ accessToken });
 
 const store = configureStore({preloadedState: { auth: !!accessToken}});
-console.log(store.getState());
+
 
 ReactDOM.render(
-  <React.StrictMode>
-    <Router>
-      <App isInitiallyLogged={!!accessToken} />
-    </Router>
-  </React.StrictMode>,
+  <Provider store={store}>
+    <React.StrictMode>
+      <Router>
+        <App />
+      </Router>
+    </React.StrictMode>
+  </Provider>,
   document.getElementById('root')
 );
