@@ -7,7 +7,7 @@ import { logout } from '../../../api/auth';
 import { getIsLogged } from '../../../store/selectors';
 import { authLogout } from '../../../store/actions';
 
-const AuthButton = ({ handleLogout, isLogged, onLogout }) => {
+const AuthButton = ({ isLogged, onLogout: handleLogout }) => {
   const handleLogoutConfirm = async () => {
     await logout();
     handleLogout();
@@ -34,7 +34,7 @@ AuthButton.defaultProps = {
   isLogged: false,
 };
 
-const mapDispatchToProps = dispatch => ({onLogout: () =>  dispatch(authLogout)});
+const mapDispatchToProps = dispatch => ({onLogout: () =>  dispatch(authLogout())});
 const mapStateToProps = state => ({ isLogged: getIsLogged(state)});
 
 
