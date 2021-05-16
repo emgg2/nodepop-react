@@ -7,8 +7,6 @@ const validPassword = ({ password }) => password;
 
 function LoginForm({ onSubmit }) {
 
-  console.log()
-
   const {
     formValue: credentials,
     handleChange,

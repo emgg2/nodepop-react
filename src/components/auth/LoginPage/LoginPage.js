@@ -9,7 +9,6 @@ import LoginForm from './LoginForm';
 
 function LoginPage({ location, history, onLogin }) {
   const { isPending: isLoading, error, execute, resetError } = usePromise();
-
   
   const handleSubmit = credentials => {
     execute(login(credentials))
