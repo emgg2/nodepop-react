@@ -4,8 +4,10 @@ import {
     AUTH_LOGIN_SUCCESS,
     AUTH_LOGIN_FAILURE,
     AUTH_LOGOUT,
-    ADVERTS_LOADED,
-    UI_RESET_ERROR}
+    UI_RESET_ERROR,
+    ADVERTS_LOADED_REQUEST,
+    ADVERTS_LOADED_SUCCESS,
+    ADVERTS_LOADED_FAILURE}
     from './types';
 
 
@@ -51,14 +53,39 @@ export const authLogout = () => {
     }
 }
 
-export const advertsLoaded = adverts => {
+export const advertsLoadedRequest = adverts => {
     return {
-        type: ADVERTS_LOADED,
-        payload: {
-            adverts,
-        }        
+        type: ADVERTS_LOADED_REQUEST,             
     }
+}
 
+export const advertsLoadedSuccess = adverts => {
+    return {
+        type: ADVERTS_LOADED_SUCCESS,          
+        payload: adverts,   
+    }
+}
+
+export const advertsLoadedFailure = error => {
+    return {
+        type: ADVERTS_LOADED_FAILURE,
+        payload: error,
+        error: true                     
+    }
+}
+
+export const advertsLoadAction = (credentials, history, location) => {
+    return async function (dispatch, getState) {
+        dispatch(advertsLoadedRequest());
+        try {
+            await login(credentials);
+            dispatch(advertsLoadedSuccess());
+            const { from } = location.state || { from : { pathname: '/'}};
+            history.replace(from);
+        } catch (error) {
+            dispatch(advertsLoadedFailure(error));            
+        }
+    }
 }
 
 export const resetError = () => {

@@ -1,5 +1,7 @@
 import { 
-    ADVERTS_LOADED, 
+    ADVERTS_LOADED_REQUEST,
+    ADVERTS_LOADED_SUCCESS,
+    ADVERTS_LOADED_FAILURE,
     AUTH_LOGIN_REQUEST, 
     AUTH_LOGIN_SUCCESS, 
     AUTH_LOGOUT, 
@@ -29,8 +31,10 @@ export function auth (state = initialValue.auth, action) {
 
 export function adverts (state=initialValue.adverts, action) {
     switch (action.type) {        
-        case ADVERTS_LOADED:
-            return action.payload.adverts 
+        case ADVERTS_LOADED_REQUEST:
+            return { ...state, loading: true, error: null}
+        case ADVERTS_LOADED_SUCCESS:
+            return { ...state, adverts: action.payload.adverts} ;
         default:
             return state;
     }        
