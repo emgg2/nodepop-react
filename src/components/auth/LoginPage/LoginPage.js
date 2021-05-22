@@ -1,22 +1,17 @@
-import React from 'react';
-import T from 'prop-types';
-import { connect } from 'react-redux';
-import { authLogin } from '../../../store/actions';
 
-import usePromise from '../../../hooks/usePromise';
-import { login } from '../../../api/auth';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { getUi } from '../../../store/selectors';
+
 import LoginForm from './LoginForm';
+import { loginAction, resetError } from '../../../store/actions';
 
 function LoginPage({ location, history, onLogin }) {
-  const { isPending: isLoading, error, execute, resetError } = usePromise();
-  
+  const dispatch = useDispatch();
+  const {error, isLoading} = useSelector(getUi);
+   
   const handleSubmit = credentials => {
-    execute(login(credentials))
-      .then(onLogin())
-      .then(() => {
-        const { from } = location.state || { from: { pathname: '/' } };
-        history.replace(from);
-      });
+    dispatch(loginAction (credentials, history, location));
   };
 
   return (
@@ -24,7 +19,7 @@ function LoginPage({ location, history, onLogin }) {
       <LoginForm onSubmit={handleSubmit} />
       {isLoading && <p>...login in nodepop</p>}
       {error && (
-        <div onClick={resetError} style={{ color: 'red' }}>
+        <div onClick={() => dispatch(resetError())} style={{ color: 'red' }}>
           {error.message}
         </div>
       )}
@@ -32,14 +27,5 @@ function LoginPage({ location, history, onLogin }) {
   );
 }
 
-LoginPage.propTypes = {
-  location: T.shape({ state: T.shape({ from: T.object.isRequired }) })
-    .isRequired,
-  history: T.shape({ replace: T.func.isRequired }).isRequired,
-};
 
-const mapDispatchToProps = dispatch => ({
-    onLogin: () => dispatch(authLogin()), 
-})
-
-export default connect(null, mapDispatchToProps)(LoginPage);
+export default LoginPage;

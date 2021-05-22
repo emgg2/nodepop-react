@@ -9,12 +9,19 @@ import storage from '../../../utils/storage';
 import { getAdverts } from '../../../api/adverts';
 import { defaultFilters, filterAdverts } from './filters';
 import usePromise from '../../../hooks/usePromise';
+import { useDispatch, useSelector } from 'react-redux';
+
+
+
 
 const getFilters = () => storage.get('filters') || defaultFilters;
 const saveFilters = filters => storage.set('filters', filters);
 
 function AdvertsPage() {
-  const { isPending: isLoading, error, execute, data: adverts } = usePromise(
+  const dispatch = useDispatch();
+  const adverts = useSelector(getAdverts());
+
+  const { isPending: isLoading, error, execute } = usePromise(
     []
   );
   const [filters, setFilters] = React.useState(getFilters);

@@ -1,19 +1,23 @@
 import { 
     ADVERTS_LOADED, 
-    AUTH_LOGIN, 
-    AUTH_LOGOUT 
+    AUTH_LOGIN_REQUEST, 
+    AUTH_LOGIN_SUCCESS, 
+    AUTH_LOGOUT, 
+    UI_RESET_ERROR
 } from './types';
 
 const initialValue = {
     auth: false,
     adverts: [],
-    ui: {}
-
+    ui: {
+        loading: false,
+        error: null
+    }
 }
 
 export function auth (state = initialValue.auth, action) {
     switch (action.type) {
-        case AUTH_LOGIN:
+        case AUTH_LOGIN_SUCCESS:
             return true ;
         case AUTH_LOGOUT:
             return false ;
@@ -22,7 +26,6 @@ export function auth (state = initialValue.auth, action) {
             return state;
     }        
 }
-
 
 export function adverts (state=initialValue.adverts, action) {
     switch (action.type) {        
@@ -34,6 +37,18 @@ export function adverts (state=initialValue.adverts, action) {
 }
 
 export function ui (state=initialValue.ui, action) {
-    return state;
+    if(action.error) {
+        return { ...state, loading:false, error: action.payload}
+    }
+    switch (action.type) {
+        case AUTH_LOGIN_REQUEST:
+            return { ...state, loading: true, error:null }
+        case AUTH_LOGIN_SUCCESS:
+            return { ...state, loading:false}     
+        case UI_RESET_ERROR:
+            return {...state, error:null}                   
+        default:
+            return state;
+    }
 }
 
