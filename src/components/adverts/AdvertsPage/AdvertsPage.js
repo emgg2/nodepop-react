@@ -16,7 +16,7 @@ const saveFilters = filters => storage.set('filters', filters);
 
 function AdvertsPage() {
   const dispatch = useDispatch();
-  const { data:adverts }  = useSelector(getAdverts);
+  const adverts  = useSelector(getAdverts);
   const {error, isLoading} = useSelector(getUi);
 
  

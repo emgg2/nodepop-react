@@ -10,10 +10,7 @@ import {
 
 const initialValue = {
     auth: false,
-    adverts: {
-        loaded:false,
-        data: []
-    },
+    adverts: [],
     ui: {
         loading: false,
         error: null
@@ -35,7 +32,7 @@ export function auth (state = initialValue.auth, action) {
 export function adverts (state=initialValue.adverts, action) {
     switch (action.type) {               
         case ADVERTS_LOADED_SUCCESS:
-            return { ...state, loaded: true,  data: action.payload} ;
+            return  action.payload ;
         default:
             return state;
     }        
