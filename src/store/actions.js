@@ -1,3 +1,4 @@
+import { getAdverts } from '../api/adverts';
 import { login } from '../api/auth';
 import {
     AUTH_LOGIN_REQUEST,
@@ -74,14 +75,14 @@ export const advertsLoadedFailure = error => {
     }
 }
 
-export const advertsLoadAction = (credentials, history, location) => {
+export const advertsLoadAction = () => {
     return async function (dispatch, getState) {
         dispatch(advertsLoadedRequest());
         try {
-            await login(credentials);
-            dispatch(advertsLoadedSuccess());
-            const { from } = location.state || { from : { pathname: '/'}};
-            history.replace(from);
+            const adverts = await getAdverts();
+            dispatch(advertsLoadedSuccess(adverts));
+            //const { from } = location.state || { from : { pathname: '/'}};
+            //history.replace(from);
         } catch (error) {
             dispatch(advertsLoadedFailure(error));            
         }

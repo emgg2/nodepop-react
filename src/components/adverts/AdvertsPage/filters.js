@@ -37,8 +37,7 @@ const filterByTags = filter => ({ tags }) =>
   !filter.length || filter.every(tag => tags.includes(tag));
 
 export const filterAdverts = (adverts, { name, price, sale, tags }) => {
-  const applyFilters = (...filters) =>
-    adverts.filter(advert => filters.every(filter => filter(advert)));
+  const applyFilters = (...filters) => adverts.filter(advert => filters.every(filter => filter(advert)));
 
   return applyFilters(
     filterByName(name),

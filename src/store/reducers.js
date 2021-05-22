@@ -10,7 +10,10 @@ import {
 
 const initialValue = {
     auth: false,
-    adverts: [],
+    adverts: {
+        loaded:false,
+        data: []
+    },
     ui: {
         loading: false,
         error: null
@@ -30,11 +33,9 @@ export function auth (state = initialValue.auth, action) {
 }
 
 export function adverts (state=initialValue.adverts, action) {
-    switch (action.type) {        
-        case ADVERTS_LOADED_REQUEST:
-            return { ...state, loading: true, error: null}
+    switch (action.type) {               
         case ADVERTS_LOADED_SUCCESS:
-            return { ...state, adverts: action.payload.adverts} ;
+            return { ...state, loaded: true,  data: action.payload} ;
         default:
             return state;
     }        
@@ -45,6 +46,7 @@ export function ui (state=initialValue.ui, action) {
         return { ...state, loading:false, error: action.payload}
     }
     switch (action.type) {
+        case ADVERTS_LOADED_REQUEST:
         case AUTH_LOGIN_REQUEST:
             return { ...state, loading: true, error:null }
         case AUTH_LOGIN_SUCCESS:
