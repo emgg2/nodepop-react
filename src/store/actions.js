@@ -36,7 +36,7 @@ export const authLoginFailure = (error) => {
     }
 }
 
-export const loginAction = (credentials) => {
+export const loginAction = credentials => {
     return async function (dispatch, getState,  { api, history }) {
         dispatch(authLoginRequest());
         try {
