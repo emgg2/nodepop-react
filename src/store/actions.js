@@ -32,8 +32,8 @@ export const authLoginFailure = (error) => {
     }
 }
 
-export const loginAction = (credentials, history, location) => {
-    return async function (dispatch, getState,  { api }) {
+export const loginAction = (credentials, location) => {
+    return async function (dispatch, getState,  { api, history }) {
         dispatch(authLoginRequest());
         try {
             await api.auth.login(credentials);

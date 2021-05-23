@@ -17,9 +17,9 @@ const logger = store => next => action => {
     return result;
 }
 
-const middleware = [thunk.withExtraArgument({ api }), logger];
 
-const configureStore = ({ preloadedState }) => {
+const configureStore = ({ preloadedState, history }) => {
+    const middleware = [thunk.withExtraArgument({ api, history }), logger];
     const store = createStore(
         combineReducers(reducers),
         preloadedState,

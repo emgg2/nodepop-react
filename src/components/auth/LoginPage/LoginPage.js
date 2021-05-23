@@ -6,12 +6,12 @@ import { getUi } from '../../../store/selectors';
 import LoginForm from './LoginForm';
 import { loginAction, resetError } from '../../../store/actions';
 
-function LoginPage({ location, history, onLogin }) {
+function LoginPage({ location, onLogin }) {
   const dispatch = useDispatch();
   const {error, isLoading} = useSelector(getUi);
    
   const handleSubmit = credentials => {
-    dispatch(loginAction (credentials, history, location));
+    dispatch(loginAction (credentials, location));
   };
 
   return (
