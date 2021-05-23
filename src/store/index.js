@@ -7,7 +7,6 @@ import thunk from 'redux-thunk';
 import * as api from '../api';
 import  * as reducers from './reducers';
 
-console.log("api", api);
 
 //a new custom middleware
 
