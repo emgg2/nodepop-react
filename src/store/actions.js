@@ -1,5 +1,4 @@
 import { getAdverts } from '../api/adverts';
-import { login } from '../api/auth';
 import {
     AUTH_LOGIN_REQUEST,
     AUTH_LOGIN_SUCCESS,
@@ -34,10 +33,10 @@ export const authLoginFailure = (error) => {
 }
 
 export const loginAction = (credentials, history, location) => {
-    return async function (dispatch, getState) {
+    return async function (dispatch, getState,  { api }) {
         dispatch(authLoginRequest());
         try {
-            await login(credentials);
+            await api.auth.login(credentials);
             dispatch(authLoginSuccess());
             const { from } = location.state || { from : { pathname: '/'}};
             history.replace(from);

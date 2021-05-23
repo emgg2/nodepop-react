@@ -3,7 +3,11 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
 
 
+
+import * as api from '../api';
 import  * as reducers from './reducers';
+
+console.log("api", api);
 
 //a new custom middleware
 
@@ -14,7 +18,7 @@ const logger = store => next => action => {
     return result;
 }
 
-const middleware = [thunk, logger];
+const middleware = [thunk.withExtraArgument({ api }), logger];
 
 const configureStore = ({ preloadedState }) => {
     const store = createStore(
