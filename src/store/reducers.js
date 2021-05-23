@@ -1,11 +1,13 @@
 import { 
     ADVERTS_LOADED_REQUEST,
     ADVERTS_LOADED_SUCCESS,
-    ADVERTS_LOADED_FAILURE,
     AUTH_LOGIN_REQUEST, 
     AUTH_LOGIN_SUCCESS, 
     AUTH_LOGOUT, 
-    UI_RESET_ERROR
+    UI_RESET_ERROR,
+    TAGS_LOADED_REQUEST,
+    TAGS_LOADED_SUCCESS,
+
 } from './types';
 
 const initialValue = {
@@ -14,7 +16,8 @@ const initialValue = {
     ui: {
         loading: false,
         error: null
-    }
+    },
+    tags: []
 }
 
 export function auth (state = initialValue.auth, action) {
@@ -38,12 +41,21 @@ export function adverts (state=initialValue.adverts, action) {
     }        
 }
 
+export function tags ( state=initialValue.tags, action) {
+    switch (action.type) {
+        case TAGS_LOADED_SUCCESS: 
+            return action.payload;
+        default:
+            return state;
+    }
+}
 export function ui (state=initialValue.ui, action) {
     if(action.error) {
         return { ...state, loading:false, error: action.payload}
     }
     switch (action.type) {
         case ADVERTS_LOADED_REQUEST:
+        case TAGS_LOADED_REQUEST:
         case AUTH_LOGIN_REQUEST:
             return { ...state, loading: true, error:null }
         case AUTH_LOGIN_SUCCESS:
