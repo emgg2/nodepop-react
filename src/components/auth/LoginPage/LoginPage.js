@@ -11,7 +11,7 @@ function LoginPage({ location, onLogin }) {
   const {error, isLoading} = useSelector(getUi);
    
   const handleSubmit = credentials => {
-    dispatch(loginAction (credentials, location));
+    dispatch(loginAction (credentials));
   };
 
   return (

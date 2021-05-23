@@ -36,13 +36,13 @@ export const authLoginFailure = (error) => {
     }
 }
 
-export const loginAction = (credentials, location) => {
+export const loginAction = (credentials) => {
     return async function (dispatch, getState,  { api, history }) {
         dispatch(authLoginRequest());
         try {
             await api.auth.login(credentials);
             dispatch(authLoginSuccess());
-            const { from } = location.state || { from : { pathname: '/'}};
+            const { from } = history.location.state || { from : { pathname: '/'}};
             history.replace(from);
         } catch (error) {
             dispatch(authLoginFailure(error));            
