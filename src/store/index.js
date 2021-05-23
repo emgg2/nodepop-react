@@ -5,7 +5,16 @@ import thunk from 'redux-thunk';
 
 import  * as reducers from './reducers';
 
-const middleware = [thunk];
+//a new custom middleware
+
+const logger = store => next => action => {
+    console.log('dispatching', action);
+    let result = next(action);
+    console.log('next state', store.getState());
+    return result;
+}
+
+const middleware = [thunk, logger];
 
 const configureStore = ({ preloadedState }) => {
     const store = createStore(
