@@ -9,14 +9,14 @@ import storage from '../../../utils/storage';
 import { defaultFilters, filterAdverts } from './filters';
 import { useDispatch, useSelector } from 'react-redux';
 import { advertsLoadAction, resetError } from '../../../store/actions';
-import { getUi, getAdverts } from '../../../store/selectors';
+import { getUi, getAdvertsData } from '../../../store/selectors';
 
 const getFilters = () => storage.get('filters') || defaultFilters;
 const saveFilters = filters => storage.set('filters', filters);
 
 function AdvertsPage() {
   const dispatch = useDispatch();
-  const adverts  = useSelector(getAdverts);
+  const adverts  = useSelector(getAdvertsData);
   const {error, isLoading} = useSelector(getUi);
 
  
