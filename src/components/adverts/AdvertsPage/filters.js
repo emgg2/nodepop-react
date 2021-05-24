@@ -37,14 +37,20 @@ const filterByTags = filter => ({ tags }) =>
   !filter.length || filter.every(tag => tags.includes(tag));
 
 export const filterAdverts = (adverts, { name, price, sale, tags }) => {
+  
   const applyFilters = (...filters) => adverts.filter(advert => filters.every(filter => filter(advert)));
 
-  return applyFilters(
-    filterByName(name),
-    filterByPrice(price),
-    filterBySale(sale),
-    filterByTags(tags)
-  );
+  if(!adverts) {
+    return '';
+  }
+
+    
+    return applyFilters(
+      filterByName(name),
+      filterByPrice(price),
+      filterBySale(sale),
+      filterByTags(tags)
+    );
 };
 
 // export const filterAdverts = (adverts, { name, price, sale, tags }) =>

@@ -1,4 +1,4 @@
-import { getAdverts, getTags } from '../api/adverts';
+import { getAdvertsLoaded } from './selectors';
 import {
     AUTH_LOGIN_REQUEST,
     AUTH_LOGIN_SUCCESS,
@@ -13,8 +13,6 @@ import {
     TAGS_LOADED_FAILURE,
     }
     from './types';
-
-
 
 export const authLoginRequest = () => {
     return {
@@ -79,13 +77,16 @@ export const advertsLoadedFailure = error => {
 }
 
 export const advertsLoadAction = () => {
-    return async function (dispatch, getState) {
+
+    return async function (dispatch, getState, { api }) {
+        const adverts = getAdvertsLoaded(getState());
+        if(adverts) {
+            return;
+        }
         dispatch(advertsLoadedRequest());
         try {
-            const adverts = await getAdverts();
+            const adverts = await api.adverts.getAdverts();
             dispatch(advertsLoadedSuccess(adverts));
-            //const { from } = location.state || { from : { pathname: '/'}};
-            //history.replace(from);
         } catch (error) {
             dispatch(advertsLoadedFailure(error));            
         }
@@ -96,7 +97,6 @@ export const resetError = () => {
     return {
         type: UI_RESET_ERROR
     }
-
 }
 
 export const tagsLoadedRequest = () => {
@@ -121,11 +121,11 @@ export const tagsLoadedFailure = error => {
 }
 
 export const tagsLoadAction = () => {
-    return async function (dispatch, getState) {
+    return async function (dispatch, getState, { api }) {
         dispatch(tagsLoadedRequest());
         try {
-            const adverts = await getTags();
-            dispatch(tagsLoadedSuccess(adverts));
+            const tags = await api.adverts.getTags();
+            dispatch(tagsLoadedSuccess(tags));
         } catch (error) {
             dispatch(tagsLoadedFailure(error));            
         }

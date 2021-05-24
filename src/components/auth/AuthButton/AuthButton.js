@@ -35,8 +35,7 @@ AuthButton.defaultProps = {
   isLogged: false,
 };
 
-const mapDispatchToProps ={handleLogout: authLogout};
-//const mapDispatchToProps = authActions;
+const mapDispatchToProps = {handleLogout: authLogout};
 const mapStateToProps = state => ({ isLogged: getIsLogged(state)});
 
 

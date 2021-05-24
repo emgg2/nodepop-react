@@ -15,7 +15,7 @@ const accessToken = storage.get('auth');
 configureClient({ accessToken });
 
 const store = configureStore({
-  preloadedState: { auth: !!accessToken, adverts: []},
+  preloadedState: { auth: !!accessToken},
   history
 });
 
