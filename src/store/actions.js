@@ -1,4 +1,4 @@
-import { getAdvertsLoaded, getTagsLoaded } from './selectors';
+import { getAdvertsLoaded, getTagsLoaded, deleteAdvert } from './selectors';
 import {
     AUTH_LOGIN_REQUEST,
     AUTH_LOGIN_SUCCESS,
@@ -11,6 +11,9 @@ import {
     ADVERT_CREATED_REQUEST,
     ADVERT_CREATED_SUCCESS,
     ADVERT_CREATED_FAILURE,
+    ADVERT_DELETED_REQUEST,
+    ADVERT_DELETED_SUCCESS,
+    ADVERT_DELETED_FAILURE,
     TAGS_LOADED_REQUEST,
     TAGS_LOADED_SUCCESS,
     TAGS_LOADED_FAILURE,
@@ -51,7 +54,6 @@ export const loginAction = credentials => {
     }
 }
 
-
 export const authLogout = () => {
     return  {
         type: AUTH_LOGOUT
@@ -79,7 +81,6 @@ export const advertsLoadedFailure = error => {
     }
 }
 
-
 export const advertsCreatedRequest = () => {
     return {
         type: ADVERT_CREATED_REQUEST,             
@@ -102,9 +103,7 @@ export const advertsCreatedFailure = error => {
 }
 
 export const advertsLoadAction = () => {
-
     return async function (dispatch, getState, { api }) {
-
         const adverts = getAdvertsLoaded(getState());
         console.log(adverts);
         if(adverts) {
@@ -122,12 +121,46 @@ export const advertsLoadAction = () => {
 }
 
 export const advertsCreateAction = advert => {
-
     return async function (dispatch, getState, { api, history }) {
             dispatch(advertsCreatedRequest());
         try {
             const createAdvert = await api.adverts.createAdvert(advert);
             dispatch(advertsCreatedSuccess(createAdvert));
+            history.push(`/`)
+        } catch (error) {
+            dispatch(advertsCreatedFailure(error));            
+        }
+    }
+}
+
+export const advertsDeletedRequest = () => {
+    return {
+        type: ADVERT_DELETED_REQUEST,             
+    }
+}
+
+export const advertsDeletedSuccess = adverts => {
+    return {
+        type: ADVERT_DELETED_SUCCESS,          
+        payload: adverts,   
+    }
+}
+
+export const advertsDeletedFailure = error => {
+    return {
+        type: ADVERT_DELETED_FAILURE,
+        payload: error,
+        error: true                     
+    }
+}
+
+export const advertsDeleteAction = advertId => {
+    return async function (dispatch, getState, { api, history }) {
+            dispatch(advertsDeletedRequest());
+        try {
+            await api.adverts.deleteAdvert(advertId);
+            const adverts = deleteAdvert(getState(),advertId);
+            dispatch(advertsDeletedSuccess(adverts));
             history.push(`/`)
         } catch (error) {
             dispatch(advertsCreatedFailure(error));            

@@ -4,13 +4,14 @@ import { Redirect } from 'react-router-dom';
 import Layout from '../../layout';
 import AdvertDetail from './AdvertDetail';
 
-import { connect } from 'react-redux';
+import { connect} from 'react-redux';
 import { getAdvertDetail, getUi } from '../../../store/selectors';
+import { advertsDeleteAction } from '../../../store/actions';
 
-function AdvertPage({advert, error}) {
+function AdvertPage({advert, error, dispatch}) {
 
   const handleDelete = () => {
-    //execute(deleteAdvert(advertId)).then(() => history.push('/'));
+    dispatch(advertsDeleteAction(advert.id))
   };
 
   if (error?.statusCode === 401) {

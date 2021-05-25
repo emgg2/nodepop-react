@@ -9,6 +9,12 @@ export const getAdvertsLoaded = state => state.adverts.loaded;
 
 export const getAdverts = state => state.advert;
 export const getAdvertDetail = (state, advertId) => state.adverts.data.find(advert => advert.id === advertId);
+export const deleteAdvert = (state, advertId) => {
+ return state.adverts.data.filter(function(advert) {
+          return advert.id !== advertId ;
+        });
+    
+}
 
 export const getUi = state => state.ui;
 
