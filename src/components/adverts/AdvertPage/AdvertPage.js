@@ -1,24 +1,16 @@
 import React from 'react';
-import { Redirect, useParams, useHistory } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 
 import Layout from '../../layout';
 import AdvertDetail from './AdvertDetail';
-import { getAdvert, deleteAdvert } from '../../../api/adverts';
-import usePromise from '../../../hooks/usePromise';
 
-function AdvertPage() {
-  const { advertId } = useParams();
-  const history = useHistory();
-  const { isPending: isLoading, error, execute, data: advert } = usePromise(
-    null
-  );
+import { connect } from 'react-redux';
+import { getAdvertDetail, getUi } from '../../../store/selectors';
 
-  React.useEffect(() => {
-    execute(getAdvert(advertId));
-  }, [advertId]);
+function AdvertPage({advert, error}) {
 
   const handleDelete = () => {
-    execute(deleteAdvert(advertId)).then(() => history.push('/'));
+    //execute(deleteAdvert(advertId)).then(() => history.push('/'));
   };
 
   if (error?.statusCode === 401) {
@@ -36,4 +28,10 @@ function AdvertPage() {
   );
 }
 
-export default AdvertPage;
+const mapStateToProps = (state , ownProps)=>({
+  advert: getAdvertDetail(state, ownProps.match.params.advertId),
+  ...getUi(state)
+})
+
+
+export default connect(mapStateToProps)(AdvertPage);

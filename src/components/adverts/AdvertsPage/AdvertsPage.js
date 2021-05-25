@@ -17,7 +17,7 @@ const saveFilters = filters => storage.set('filters', filters);
 function AdvertsPage() {
   const dispatch = useDispatch();
   const adverts  = useSelector(getAdvertsData);
-  const {error, isLoading} = useSelector(getUi);
+  const { error } = useSelector(getUi);
 
  
   const [filters, setFilters] = React.useState(getFilters);
@@ -36,13 +36,7 @@ function AdvertsPage() {
   const filteredAdverts = filterAdverts(adverts, filters);
 
   return (
-    <Layout>
-      {isLoading && <p>...login in nodepop</p>}
-      {error && (
-        <div onClick={() => dispatch(resetError())} style={{ color: 'red' }}>
-          {error.message}
-        </div>
-      )}
+    <Layout>      
       {adverts.length > 0 && (
         <FiltersForm
           initialFilters={filters}

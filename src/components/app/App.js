@@ -11,7 +11,7 @@ function App() {
       <Switch>
         <PrivateRoute exact path="/adverts/new" component={NewAdvertPage} />
         <PrivateRoute exact path="/adverts/:advertId">
-          <AdvertPage />
+          {routeProps => <AdvertPage {...routeProps} />}
         </PrivateRoute>
         <PrivateRoute exact path="/adverts">
           <AdvertsPage />

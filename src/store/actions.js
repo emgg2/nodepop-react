@@ -104,10 +104,13 @@ export const advertsCreatedFailure = error => {
 export const advertsLoadAction = () => {
 
     return async function (dispatch, getState, { api }) {
+
         const adverts = getAdvertsLoaded(getState());
+        console.log(adverts);
         if(adverts) {
             return;
         }
+        console.log("pasa");
         dispatch(advertsLoadedRequest());
         try {
             const adverts = await api.adverts.getAdverts();
@@ -125,8 +128,7 @@ export const advertsCreateAction = advert => {
         try {
             const createAdvert = await api.adverts.createAdvert(advert);
             dispatch(advertsCreatedSuccess(createAdvert));
-            //return createAdvert;
-           history.push(`/adverts/${createAdvert.id}`)
+            history.push(`/`)
         } catch (error) {
             dispatch(advertsCreatedFailure(error));            
         }
