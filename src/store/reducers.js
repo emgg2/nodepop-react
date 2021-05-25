@@ -5,6 +5,8 @@ import {
     AUTH_LOGOUT, 
     ADVERTS_LOADED_REQUEST,
     ADVERTS_LOADED_SUCCESS,
+    ADVERT_CREATED_REQUEST,
+    ADVERT_CREATED_SUCCESS,
     UI_RESET_ERROR,
     TAGS_LOADED_REQUEST,
     TAGS_LOADED_SUCCESS,
@@ -44,6 +46,9 @@ export function adverts (state = initValue.adverts, action) {
     switch (action.type) {            
         case ADVERTS_LOADED_SUCCESS:      
             return {...state, loaded: true, data: action.payload};
+        case ADVERT_CREATED_SUCCESS:
+            return {...state, loaded: true, data: [ ...state.data, action.payload]};
+            return 
         default:
             return state;
     }        
@@ -66,6 +71,7 @@ export function ui (state=initValue.ui, action) {
         case ADVERTS_LOADED_REQUEST:
         case TAGS_LOADED_REQUEST:
         case AUTH_LOGIN_REQUEST:
+        case ADVERT_CREATED_REQUEST:
             return { ...state, isLoading: true, error:null }
         case AUTH_LOGIN_SUCCESS:
         case ADVERTS_LOADED_SUCCESS:

@@ -1,4 +1,4 @@
-import { getAdvertsLoaded } from './selectors';
+import { getAdvertsLoaded, getTagsLoaded } from './selectors';
 import {
     AUTH_LOGIN_REQUEST,
     AUTH_LOGIN_SUCCESS,
@@ -8,6 +8,9 @@ import {
     ADVERTS_LOADED_REQUEST,
     ADVERTS_LOADED_SUCCESS,
     ADVERTS_LOADED_FAILURE,
+    ADVERT_CREATED_REQUEST,
+    ADVERT_CREATED_SUCCESS,
+    ADVERT_CREATED_FAILURE,
     TAGS_LOADED_REQUEST,
     TAGS_LOADED_SUCCESS,
     TAGS_LOADED_FAILURE,
@@ -76,6 +79,28 @@ export const advertsLoadedFailure = error => {
     }
 }
 
+
+export const advertsCreatedRequest = () => {
+    return {
+        type: ADVERT_CREATED_REQUEST,             
+    }
+}
+
+export const advertsCreatedSuccess = adverts => {
+    return {
+        type: ADVERT_CREATED_SUCCESS,          
+        payload: adverts,   
+    }
+}
+
+export const advertsCreatedFailure = error => {
+    return {
+        type: ADVERT_CREATED_FAILURE,
+        payload: error,
+        error: true                     
+    }
+}
+
 export const advertsLoadAction = () => {
 
     return async function (dispatch, getState, { api }) {
@@ -89,6 +114,21 @@ export const advertsLoadAction = () => {
             dispatch(advertsLoadedSuccess(adverts));
         } catch (error) {
             dispatch(advertsLoadedFailure(error));            
+        }
+    }
+}
+
+export const advertsCreateAction = advert => {
+
+    return async function (dispatch, getState, { api, history }) {
+            dispatch(advertsCreatedRequest());
+        try {
+            const createAdvert = await api.adverts.createAdvert(advert);
+            dispatch(advertsCreatedSuccess(createAdvert));
+            //return createAdvert;
+           history.push(`/adverts/${createAdvert.id}`)
+        } catch (error) {
+            dispatch(advertsCreatedFailure(error));            
         }
     }
 }
@@ -124,6 +164,11 @@ export const tagsLoadAction = () => {
     return async function (dispatch, getState, { api }) {
         dispatch(tagsLoadedRequest());
         try {
+            const tagsLoaded = getTagsLoaded(getState());
+            if(tagsLoaded)
+            {
+                return;
+            }
             const tags = await api.adverts.getTags();
             dispatch(tagsLoadedSuccess(tags));
         } catch (error) {

@@ -5,17 +5,11 @@ import Layout from '../../layout';
 import AdvertDetail from './AdvertDetail';
 import { getAdvert, deleteAdvert } from '../../../api/adverts';
 import usePromise from '../../../hooks/usePromise';
-import { useDispatch, useSelector } from 'react-redux';
-import { advertsLoadAction, resetError } from '../../../store/actions';
-import { getUi, getAdvertsData } from '../../../store/selectors';
 
 function AdvertPage() {
   const { advertId } = useParams();
-  const dispatch = useDispatch();
-  const { error, isLoading} = useSelector(getUi);
-
-
-  const { isPending: isLoading,  execute, data: advert } = usePromise(
+  const history = useHistory();
+  const { isPending: isLoading, error, execute, data: advert } = usePromise(
     null
   );
 
@@ -37,12 +31,6 @@ function AdvertPage() {
 
   return (
     <Layout>
-      {isLoading && <p>...login in nodepop</p>}
-      {error && (
-        <div onClick={() => dispatch(resetError())} style={{ color: 'red' }}>
-          {error.message}
-        </div>
-      )}
       {advert && <AdvertDetail {...advert} onDelete={handleDelete} />}
     </Layout>
   );

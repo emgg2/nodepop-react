@@ -1,36 +1,38 @@
 import React from 'react';
-import T from 'prop-types';
 import { Redirect } from 'react-router-dom';
 
 import { createAdvert } from '../../../api/adverts';
-import usePromise from '../../../hooks/usePromise';
+
 import Layout from '../../layout';
 import NewAdvertForm from './NewAdvertForm';
+import { useDispatch, useSelector } from 'react-redux';
+import { advertsCreateAction, resetError } from '../../../store/actions';
+import { getUi } from '../../../store/selectors';
 
-function NewAdvertPage({ history }) {
-  const { isPending: isLoading, error, execute } = usePromise(null);
+function NewAdvertPage() {
+  
+  const dispatch = useDispatch();
+  const { error, isLoading } = useSelector(getUi);
 
   const handleSubmit = newAdvert => {
-    execute(createAdvert(newAdvert)).then(({ id }) =>
-      history.push(`/adverts/${id}`)
-    );
+    dispatch(advertsCreateAction(newAdvert)); 
   };
 
   if (error?.statusCode === 401) {
     return <Redirect to="/login" />;
   }
 
-  return (
+  return (   
     <Layout>
+       {isLoading && <p>...login in nodepop</p>}
+      {error && (
+      <div onClick={() => dispatch(resetError())} style={{ color: 'red' }}>
+        {error.message}
+      </div>
+    )}
       <NewAdvertForm onSubmit={handleSubmit} />
     </Layout>
   );
 }
-
-NewAdvertPage.propTypes = {
-  history: T.shape({
-    push: T.func.isRequired,
-  }).isRequired,
-};
 
 export default NewAdvertPage;

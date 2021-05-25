@@ -8,3 +8,4 @@ export const getAdverts = state => state.advert;
 export const getUi = state => state.ui;
 
 export const getTags = state => state.tags.data;
+export const getTagsLoaded = state => state.tags.loaded;
