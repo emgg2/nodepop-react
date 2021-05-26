@@ -6,9 +6,14 @@ import AdvertDetail from './AdvertDetail';
 
 import { connect} from 'react-redux';
 import { getAdvertDetail, getUi } from '../../../store/selectors';
-import { advertsDeleteAction } from '../../../store/actions';
+import { advertsDeleteAction, advertsDetailAction } from '../../../store/actions';
 
-function AdvertPage({advert, error, dispatch}) {
+function AdvertPage({advert, error, onLoad, dispatch, match}) {
+
+  React.useEffect(() => {
+    onLoad(match.params.advertId);
+  }, []);
+
 
   const handleDelete = () => {
     dispatch(advertsDeleteAction(advert.id))
@@ -34,5 +39,8 @@ const mapStateToProps = (state , ownProps)=>({
   ...getUi(state)
 })
 
+const mapDipatchToProps = dispatch => ({
+  onLoad :  advertId => dispatch(advertsDetailAction(advertId))
+});
 
-export default connect(mapStateToProps)(AdvertPage);
+export default connect(mapStateToProps, mapDipatchToProps)(AdvertPage);

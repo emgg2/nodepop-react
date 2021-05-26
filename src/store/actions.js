@@ -1,4 +1,4 @@
-import { getAdvertsLoaded, getTagsLoaded, deleteAdvert } from './selectors';
+import { getAdvertsLoaded, getTagsLoaded, deleteAdvert, getAdvertDetail } from './selectors';
 import {
     AUTH_LOGIN_REQUEST,
     AUTH_LOGIN_SUCCESS,
@@ -14,6 +14,9 @@ import {
     ADVERT_DELETED_REQUEST,
     ADVERT_DELETED_SUCCESS,
     ADVERT_DELETED_FAILURE,
+    ADVERT_DETAIL_REQUEST,
+    ADVERT_DETAIL_SUCCESS,
+    ADVERT_DETAIL_FAILURE,
     TAGS_LOADED_REQUEST,
     TAGS_LOADED_SUCCESS,
     TAGS_LOADED_FAILURE,
@@ -166,6 +169,45 @@ export const advertsDeleteAction = advertId => {
     }
 }
 
+export const advertsDetailRequest = () => {
+    return {
+        type: ADVERT_DETAIL_REQUEST,             
+    }
+}
+
+export const advertsDetailSuccess = adverts => {
+    return {
+        type: ADVERT_DETAIL_SUCCESS,          
+        payload: adverts,   
+    }
+}
+
+export const advertsDetailFailure = error => {
+    return {
+        type: ADVERT_DETAIL_FAILURE,
+        payload: error,
+        error: true                     
+    }
+}
+
+export const advertsDetailAction = advertId => {
+    return async function (dispatch, getState, { api, history }) {
+        const advertLoaded = getAdvertDetail(getState(),advertId);
+        if(advertLoaded){
+            return;
+        }
+        dispatch(advertsDetailRequest());
+        const advert = await api.adverts.getAdvert(advertId);
+        try {
+            dispatch(advertsDetailSuccess(advert));
+            return advert;
+        } catch (error) {
+            dispatch(advertsDetailFailure(error));            
+        }
+    }
+}
+
+
 export const resetError = () => {
     return {
         type: UI_RESET_ERROR
@@ -194,8 +236,7 @@ export const tagsLoadedFailure = error => {
 }
 
 export const tagsLoadAction = () => {
-    return async function (dispatch, getState, { api }) {
-        
+    return async function (dispatch, getState, { api }) {        
         try {
             const tagsLoaded = getTagsLoaded(getState());
             if(tagsLoaded)

@@ -11,6 +11,8 @@ import {
     TAGS_LOADED_SUCCESS,
     ADVERT_DELETED_SUCCESS,
     ADVERT_DELETED_REQUEST,
+    ADVERT_DETAIL_SUCCESS,
+    ADVERT_DETAIL_REQUEST,
 
 } from './types';
 
@@ -45,7 +47,9 @@ export function adverts (state = initValue.adverts, action) {
     switch (action.type) {            
         case ADVERTS_LOADED_SUCCESS:      
         case ADVERT_DELETED_SUCCESS:
+        
             return {...state, loaded: true, data: action.payload};
+        case ADVERT_DETAIL_SUCCESS:    
         case ADVERT_CREATED_SUCCESS:
             return {...state, loaded: true, data: [ ...state.data, action.payload]};
         default:
@@ -73,12 +77,14 @@ export function ui (state=initValue.ui, action) {
         case ADVERTS_LOADED_REQUEST:
         case ADVERT_CREATED_REQUEST:
         case ADVERT_DELETED_REQUEST:
+        case ADVERT_DETAIL_REQUEST:
             return { ...state, isLoading: true, error:null }
         case AUTH_LOGIN_SUCCESS:
         case TAGS_LOADED_SUCCESS:
         case ADVERTS_LOADED_SUCCESS:        
         case ADVERT_DELETED_SUCCESS:
         case ADVERT_CREATED_SUCCESS:
+        case ADVERT_DETAIL_SUCCESS:
             return { ...state, isLoading:false}     
         case UI_RESET_ERROR:
             return {...state, error:null}                   
