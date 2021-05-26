@@ -8,15 +8,14 @@ import { connect} from 'react-redux';
 import { getAdvertDetail, getUi } from '../../../store/selectors';
 import { advertsDeleteAction, advertsDetailAction } from '../../../store/actions';
 
-function AdvertPage({advert, error, onLoad, dispatch, match}) {
+function AdvertPage({advert, error, onLoad, onDeleting, match}) {
 
   React.useEffect(() => {
     onLoad(match.params.advertId);
   }, []);
 
-
-  const handleDelete = () => {
-    dispatch(advertsDeleteAction(advert.id))
+  const handleDelete = () => {    
+    onDeleting(match.params.advertId);
   };
 
   if (error?.statusCode === 401) {
@@ -40,7 +39,8 @@ const mapStateToProps = (state , ownProps)=>({
 })
 
 const mapDipatchToProps = dispatch => ({
-  onLoad :  advertId => dispatch(advertsDetailAction(advertId))
+  onLoad :  advertId => dispatch(advertsDetailAction(advertId)),
+  onDeleting : advertId => dispatch(advertsDeleteAction(advertId))
 });
 
 export default connect(mapStateToProps, mapDipatchToProps)(AdvertPage);
