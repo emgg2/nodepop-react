@@ -68,15 +68,17 @@ export function ui (state=initValue.ui, action) {
     }
 
     switch (action.type) {
-        case ADVERTS_LOADED_REQUEST:
-        case TAGS_LOADED_REQUEST:
         case AUTH_LOGIN_REQUEST:
-        case ADVERT_DELETED_REQUEST:
+        case TAGS_LOADED_REQUEST:
+        case ADVERTS_LOADED_REQUEST:
         case ADVERT_CREATED_REQUEST:
+        case ADVERT_DELETED_REQUEST:
             return { ...state, isLoading: true, error:null }
         case AUTH_LOGIN_SUCCESS:
-        case ADVERTS_LOADED_SUCCESS:
         case TAGS_LOADED_SUCCESS:
+        case ADVERTS_LOADED_SUCCESS:        
+        case ADVERT_DELETED_SUCCESS:
+        case ADVERT_CREATED_SUCCESS:
             return { ...state, isLoading:false}     
         case UI_RESET_ERROR:
             return {...state, error:null}                   

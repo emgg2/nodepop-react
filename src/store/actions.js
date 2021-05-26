@@ -105,11 +105,9 @@ export const advertsCreatedFailure = error => {
 export const advertsLoadAction = () => {
     return async function (dispatch, getState, { api }) {
         const adverts = getAdvertsLoaded(getState());
-        console.log(adverts);
         if(adverts) {
             return;
         }
-        console.log("pasa");
         dispatch(advertsLoadedRequest());
         try {
             const adverts = await api.adverts.getAdverts();
@@ -197,13 +195,14 @@ export const tagsLoadedFailure = error => {
 
 export const tagsLoadAction = () => {
     return async function (dispatch, getState, { api }) {
-        dispatch(tagsLoadedRequest());
+        
         try {
             const tagsLoaded = getTagsLoaded(getState());
             if(tagsLoaded)
             {
                 return;
             }
+            dispatch(tagsLoadedRequest());
             const tags = await api.adverts.getTags();
             dispatch(tagsLoadedSuccess(tags));
         } catch (error) {
