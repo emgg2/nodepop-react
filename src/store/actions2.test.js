@@ -2,10 +2,21 @@ import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import { adverts } from '../api';
 
-import {  loginAction, advertsCreateAction } from './actions';
+import {  loginAction, advertsCreateAction, advertsDeleteAction } from './actions';
 
 
-import { ADVERT_CREATED_FAILURE, ADVERT_CREATED_REQUEST, ADVERT_CREATED_SUCCESS, AUTH_LOGIN_FAILURE, AUTH_LOGIN_REQUEST, AUTH_LOGIN_SUCCESS  } from './types';
+import { 
+    ADVERT_CREATED_FAILURE,
+    ADVERT_CREATED_REQUEST,
+    ADVERT_CREATED_SUCCESS,
+    AUTH_LOGIN_FAILURE,
+    AUTH_LOGIN_REQUEST,
+    AUTH_LOGIN_SUCCESS,
+    ADVERT_DELETED_SUCCESS,
+    ADVERT_DELETED_REQUEST,
+    ADVERT_DELETED_FAILURE
+
+  } from './types';
 
     
 const createStore = extraArgument => state => {
@@ -15,6 +26,32 @@ const createStore = extraArgument => state => {
     return store;
 }
 
+
+describe('AdvertsDeleteAction', () => {
+
+    describe ('when delete advert resolves', () => {
+        const adverts = [{ id: 2, name: 'adv2'}] ;
+        const getState = {adverts:{ data: [{ id: 1, name: 'adv1'},{ id: 2, name: 'adv2'}]}};
+        const mockHistoryPush = jest.fn();
+        const history = { push: mockHistoryPush};
+        console.log(getState);
+
+        test('should dispatch ADVERT_DELETED_REQUEST and ADVERT_DELETED_SUCCESS', async () => {
+            const api = {
+                adverts: { deleteAdvert: jest.fn().mockResolvedValue(getState, 1)}
+            };
+            const store = createStore({api, history})();
+            await store.dispatch(advertsDeleteAction(1));
+            const actions = store.getActions();
+            console.log('EVAAAA', actions);
+            expect(actions).toEqual([
+                {type: ADVERT_DELETED_REQUEST},
+                {type: ADVERT_DELETED_SUCCESS, payload: adverts}
+            ])
+        })
+        
+    })
+})
 
 describe('AdvertsCreateAction', () => {
     describe('when advert create resolves', () => {
@@ -33,6 +70,13 @@ describe('AdvertsCreateAction', () => {
                 {type: ADVERT_CREATED_REQUEST},
                 {type: ADVERT_CREATED_SUCCESS, payload: advert}
             ])
+        })
+
+        test('should redirect /', async () => {
+            const api = { adverts: {createAdvert: jest.fn().mockResolvedValue(advert)}};
+            const store = createStore({api, history})();
+            await store.dispatch(advertsCreateAction(advert));
+            expect(history.push).toHaveBeenCalledWith('/');
         })
 
     })    
