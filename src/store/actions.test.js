@@ -4,14 +4,18 @@ import {
     authLoginSuccess,
     advertsLoadedSuccess,
     tagsLoadedSuccess, 
-    loginAction
+    loginAction,
+    advertsLoadAction
  } from './actions';
+import { getAdvertsLoaded } from './selectors';
 
 import { AUTH_LOGIN_REQUEST,
      AUTH_LOGIN_FAILURE,
      AUTH_LOGIN_SUCCESS,
      ADVERTS_LOADED_SUCCESS,
-     TAGS_LOADED_SUCCESS
+     ADVERTS_LOADED_REQUEST,
+     ADVERTS_LOADED_FAILURE,
+     TAGS_LOADED_SUCCESS,
      } from './types';
 
 describe('authLoginRequest', () =>{
@@ -66,6 +70,56 @@ describe('TagsLoadedSuccess', () =>{
     })
 });
 
+
+ describe('AdvertsLoadAction', () => {
+     describe('when adverts api resolves', () => {       
+        const action = advertsLoadAction();
+        const dispatch = jest.fn();
+        const getState = {adverts : { loaded: true  }};
+        const api = {
+            adverts: { getAdverts: jest.fn().mockResolvedValue()}
+        };
+
+        test('should return if there are adverts loaded', () => {
+            const advertsLoaded = getAdvertsLoaded(getState);
+            expect(advertsLoaded).toBeTruthy();            
+
+        })
+
+        
+        test('should dispatch and ADVERTS_LOADED_REQUEST action', async() => {
+            await action(dispatch, getState, { api });
+            expect(dispatch).toHaveBeenNthCalledWith(1,{type: ADVERTS_LOADED_REQUEST});
+            //expect(dispatch).toHaveBeenCalled();
+        });
+
+        test('should dispatch and AUTH_LOADED_SUCCESS action', async () => {            
+            await action(dispatch, getState, { api });
+            expect(dispatch).toHaveBeenNthCalledWith(2, {type: ADVERTS_LOADED_SUCCESS});
+        });
+
+
+         describe('when getAdverts api throws', () => {
+            
+            const action = advertsLoadAction();
+            const dispatch = jest.fn();            
+            const getState = () =>{};
+            
+            test('should dispatch and ADVERTS_LOADED_FAILURE action', async () => {            
+                const error = 'error';
+                const api = {
+                    adverts: { getAdverts: jest.fn().mockRejectedValue(error)}
+                };
+                await action(dispatch, getState, { api });
+                expect(dispatch).toHaveBeenCalledWith({type: ADVERTS_LOADED_FAILURE, payload: error, error:true});
+            });  
+            })   
+    
+
+
+      })
+
+})
 
 describe('LoginAction', () => {
     describe('when login api resolves', () => {
