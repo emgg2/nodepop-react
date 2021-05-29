@@ -160,7 +160,8 @@ export const advertsDeleteAction = advertId => {
             dispatch(advertsDeletedRequest());
         try {
             await api.adverts.deleteAdvert(advertId);
-            const adverts = deleteAdvert(getState(),advertId);
+           // const adverts = deleteAdvert(getState(),advertId);
+           const adverts=[];
             dispatch(advertsDeletedSuccess(adverts));
             history.push(`/`)
         } catch (error) {

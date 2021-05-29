@@ -2,7 +2,7 @@ import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import { adverts } from '../api';
 
-import {  loginAction, advertsCreateAction, advertsDeleteAction } from './actions';
+import {  loginAction, advertsCreateAction, advertsDeleteAction, deleteAdvert } from './actions';
 
 
 import { 
@@ -27,27 +27,32 @@ const createStore = extraArgument => state => {
 }
 
 
-describe('AdvertsDeleteAction', () => {
+describe('advertsDeleteAction', () => {
 
     describe ('when delete advert resolves', () => {
-        const adverts = [{ id: 2, name: 'adv2'}] ;
-        const getState = {adverts:{ data: [{ id: 1, name: 'adv1'},{ id: 2, name: 'adv2'}]}};
+        const getState = () => ({adverts: { 
+                data: [
+                    { id: 1, name: 'adv1'},
+                    
+                ]}});
+  
         const mockHistoryPush = jest.fn();
         const history = { push: mockHistoryPush};
-        console.log(getState);
+        const deleteAdvert= (state, advertId) => [];
 
-        test('should dispatch ADVERT_DELETED_REQUEST and ADVERT_DELETED_SUCCESS', async () => {
+        
+        test('should dispatch ADVERT_DELETED_REQUEST and ADVERT_DELETED_SUCCESS', async () => {            
             const api = {
-                adverts: { deleteAdvert: jest.fn().mockResolvedValue(getState, 1)}
+                adverts: { deleteAdvert: jest.fn().mockResolvedValue(getState(), 1)}
             };
             const store = createStore({api, history})();
             await store.dispatch(advertsDeleteAction(1));
+            const advertsDeleted = deleteAdvert(getState(), 1);        
             const actions = store.getActions();
-            console.log('EVAAAA', actions);
             expect(actions).toEqual([
-                {type: ADVERT_DELETED_REQUEST},
-                {type: ADVERT_DELETED_SUCCESS, payload: adverts}
-            ])
+                 {type: ADVERT_DELETED_REQUEST},
+                 {type: ADVERT_DELETED_SUCCESS, payload: advertsDeleted}
+             ])
         })
         
     })
@@ -98,6 +103,7 @@ describe('AdvertsCreateAction', () => {
             ])
         })
     })    
+
 })
 
 
