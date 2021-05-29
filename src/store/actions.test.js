@@ -5,7 +5,8 @@ import {
     advertsLoadedSuccess,
     tagsLoadedSuccess, 
     loginAction,
-    advertsLoadAction
+    advertsLoadAction,
+    advertsCreateAction
  } from './actions';
 import { getAdvertsLoaded } from './selectors';
 
@@ -15,6 +16,9 @@ import { AUTH_LOGIN_REQUEST,
      ADVERTS_LOADED_SUCCESS,
      ADVERTS_LOADED_REQUEST,
      ADVERTS_LOADED_FAILURE,
+     ADVERTS_CREATED_REQUEST,
+     ADVERTS_CREATED_SUCCESS,
+     ADVERTS_CREATED_FAILURE,
      TAGS_LOADED_SUCCESS,
      } from './types';
 
@@ -75,28 +79,31 @@ describe('TagsLoadedSuccess', () =>{
      describe('when adverts api resolves', () => {       
         const action = advertsLoadAction();
         const dispatch = jest.fn();
-        const getState = {adverts : { loaded: true  }};
+        
         const api = {
             adverts: { getAdverts: jest.fn().mockResolvedValue()}
         };
 
         test('should return if there are adverts loaded', () => {
+            const getState = {adverts : { loaded: true  }};
             const advertsLoaded = getAdvertsLoaded(getState);
             expect(advertsLoaded).toBeTruthy();            
 
         })
-
         
-        test('should dispatch and ADVERTS_LOADED_REQUEST action', async() => {
-            await action(dispatch, getState, { api });
+        test('should dispatch and ADVERTS_LOADED_REQUEST action', async () => {
+            const getState= () => {};
+            await action(dispatch, getState(), { api });        
             expect(dispatch).toHaveBeenNthCalledWith(1,{type: ADVERTS_LOADED_REQUEST});
-            //expect(dispatch).toHaveBeenCalled();
         });
 
         test('should dispatch and AUTH_LOADED_SUCCESS action', async () => {            
+            const getState= () => {};
             await action(dispatch, getState, { api });
             expect(dispatch).toHaveBeenNthCalledWith(2, {type: ADVERTS_LOADED_SUCCESS});
         });
+
+    })
 
 
          describe('when getAdverts api throws', () => {
@@ -113,13 +120,30 @@ describe('TagsLoadedSuccess', () =>{
                 await action(dispatch, getState, { api });
                 expect(dispatch).toHaveBeenCalledWith({type: ADVERTS_LOADED_FAILURE, payload: error, error:true});
             });  
-            })   
+            })     
+
+
     
 
-
-      })
-
 })
+
+
+// describe('AdvertsCreateAction', () => {
+//     describe('when advertsCreate resolves', () => {
+//         const advert = 'advert';
+//         const action = advertsCreateAction(advert);
+//         const dispatch = jest.fn();
+//         const getState = () => {};
+//         const api = {
+//             adverts: { createAdvert: jest.fn().mockResolvedValue()}
+//         };
+//         const history = { push:{} };
+//         test('should dispatch and ADVERTS_CREATED_REQUEST', () =>{
+//             action (dispatch, getState, {api,history});
+//             expect(dispatch).toHaveBeenCalled({type:ADVERTS_CREATED_REQUEST});
+//         })
+//     })
+// })
 
 describe('LoginAction', () => {
     describe('when login api resolves', () => {
