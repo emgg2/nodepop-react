@@ -41,7 +41,7 @@ describe('advertsDeleteAction', () => {
         const deleteAdvert= (state, advertId) => [];
 
         
-        test('should dispatch ADVERT_DELETED_REQUEST and ADVERT_DELETED_SUCCESS', async () => {            
+        test('shwould dispatch ADVERT_DELETED_REQUEST and ADVERT_DELETED_SUCCESS', async () => {            
             const api = {
                 adverts: { deleteAdvert: jest.fn().mockResolvedValue(getState(), 1)}
             };
@@ -54,7 +54,43 @@ describe('advertsDeleteAction', () => {
                  {type: ADVERT_DELETED_SUCCESS, payload: advertsDeleted}
              ])
         })
+        test('shwould redirect /', async () => {            
+            const api = {
+                adverts: { deleteAdvert: jest.fn().mockResolvedValue(getState(), 1)}
+            };
+            const store = createStore({api, history})();
+            await store.dispatch(advertsDeleteAction(1));
+            const advertsDeleted = deleteAdvert(getState(), 1);                    
+            expect(history.push).toHaveBeenCalledWith('/');
+        })
         
+    })
+
+    describe ('when delete advert throws', () => {
+        const getState = () => ({adverts: { 
+                data: [
+                    { id: 1, name: 'adv1'},
+                    
+                ]}});
+  
+        const mockHistoryPush = jest.fn();
+        const history = { push: mockHistoryPush};
+        const deleteAdvert= (state, advertId) => [];
+        const error = 'error';
+
+        test('shwould redirect /', async () => {            
+            const api = {
+                adverts: { deleteAdvert: jest.fn().mockRejectedValue(error)}
+            };
+            const store = createStore({api, history})();
+            await store.dispatch(advertsDeleteAction(1));
+            const advertsDeleted = deleteAdvert(getState(), 1);                    
+            const actions = store.getActions();
+            expect(actions).toEqual([
+                 {type: ADVERT_DELETED_REQUEST},
+                 {type: ADVERT_DELETED_FAILURE, payload: error, error:true}
+             ])
+        })      
     })
 })
 

@@ -165,7 +165,7 @@ export const advertsDeleteAction = advertId => {
             dispatch(advertsDeletedSuccess(adverts));
             history.push(`/`)
         } catch (error) {
-            dispatch(advertsCreatedFailure(error));            
+            dispatch(advertsDeletedFailure(error));            
         }
     }
 }
