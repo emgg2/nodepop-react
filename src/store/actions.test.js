@@ -16,9 +16,9 @@ import { AUTH_LOGIN_REQUEST,
      ADVERTS_LOADED_SUCCESS,
      ADVERTS_LOADED_REQUEST,
      ADVERTS_LOADED_FAILURE,
-     ADVERTS_CREATED_REQUEST,
-     ADVERTS_CREATED_SUCCESS,
-     ADVERTS_CREATED_FAILURE,
+     ADVERT_CREATED_REQUEST,
+     ADVERT_CREATED_SUCCESS,
+     ADVERT_CREATED_FAILURE,
      TAGS_LOADED_SUCCESS,
      } from './types';
 
@@ -120,30 +120,42 @@ describe('TagsLoadedSuccess', () =>{
                 await action(dispatch, getState, { api });
                 expect(dispatch).toHaveBeenCalledWith({type: ADVERTS_LOADED_FAILURE, payload: error, error:true});
             });  
-            })     
-
-
-    
-
+            })      
 })
 
 
-// describe('AdvertsCreateAction', () => {
-//     describe('when advertsCreate resolves', () => {
-//         const advert = 'advert';
-//         const action = advertsCreateAction(advert);
-//         const dispatch = jest.fn();
-//         const getState = () => {};
-//         const api = {
-//             adverts: { createAdvert: jest.fn().mockResolvedValue()}
-//         };
-//         const history = { push:{} };
-//         test('should dispatch and ADVERTS_CREATED_REQUEST', () =>{
-//             action (dispatch, getState, {api,history});
-//             expect(dispatch).toHaveBeenCalled({type:ADVERTS_CREATED_REQUEST});
-//         })
-//     })
-// })
+describe('AdvertsCreateAction', () => {
+    describe('when advertsCreate resolves', () => {
+        const advert = 'advert';
+        const action = advertsCreateAction(advert);
+        const dispatch = jest.fn();
+        const getState = () => {};
+        const api = {
+            adverts: { createAdvert: jest.fn().mockResolvedValue()}
+        };
+        const mockHistoryPush = jest.fn();
+        const history = { push: mockHistoryPush };
+        test('should dispatch and ADVERT_CREATED_REQUEST', async () =>{
+            await action (dispatch, getState, {api,history});    
+            expect(dispatch).toHaveBeenCalledWith({type:ADVERT_CREATED_REQUEST});
+        })
+        test('should call api.adverts.createAdvert', async () =>{
+            await action (dispatch, getState, {api,history});    
+            expect(api.adverts.createAdvert).toHaveBeenCalledWith(advert);            
+        })
+        test('should dispatch and ADVERT_CREATED_SUCCESS action', async () => {            
+            await action(dispatch, getState, { api, history });
+            expect(dispatch).toHaveBeenNthCalledWith(2, {type: ADVERT_CREATED_SUCCESS});
+        });
+
+        test('should redirect to /', async () => {        
+            await action(dispatch, getState, { api, history });
+            expect(mockHistoryPush).toHaveBeenCalledWith('/');
+        });
+    })
+
+
+})
 
 describe('LoginAction', () => {
     describe('when login api resolves', () => {
