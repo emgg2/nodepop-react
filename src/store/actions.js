@@ -123,8 +123,8 @@ export const advertsLoadAction = () => {
 
 export const advertsCreateAction = advert => {
     return async function (dispatch, getState, { api, history }) {
-            dispatch(advertsCreatedRequest());
         try {
+            dispatch(advertsCreatedRequest());
             const createAdvert = await api.adverts.createAdvert(advert);
             dispatch(advertsCreatedSuccess(createAdvert));
             history.push(`/`);
