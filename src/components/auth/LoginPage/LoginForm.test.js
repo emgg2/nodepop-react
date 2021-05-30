@@ -10,7 +10,7 @@ describe(' LOGIN FORM ', () => {
 
     const render = () => shallow(<LoginForm {...props} />);
 
-    test('shoul render', ()=> {
+    test('should render', ()=> {
         const wrapper = render ();
         expect(wrapper.exists()).toBe(true);
     })
@@ -45,6 +45,11 @@ describe(' LOGIN FORM ', () => {
         form.simulate('submit', {preventDefault: () => {}});
         expect(wrapper.find('button').props().disabled).toBe(false);
         expect(props.onSubmit).toHaveBeenCalledWith(credentials);
+    })
+
+    test('snapshot testing', () => {
+        const wrapper = render();
+        expect (wrapper).toMatchSnapshot();
     })
 
 })

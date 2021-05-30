@@ -61,6 +61,11 @@ describe('NEW ADVERT FORM', () => {
         expect(wrapper.find('button').props().disabled).toBe(false);
         expect(props.onSubmit).toHaveBeenCalledWith(advert);       
         
+    }); 
+    
+    test('snapshot testing', () => {
+        const wrapper = render();
+        expect (wrapper).toMatchSnapshot();
     })
 
 });
