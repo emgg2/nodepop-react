@@ -27,7 +27,7 @@ const createStore = extraArgument => state => {
 }
 
 
-describe('advertsDeleteAction', () => {
+describe('AdvertsDeleteAction', () => {
 
     describe ('when delete advert resolves', () => {
         const getState = () => ({adverts: { 
@@ -84,7 +84,7 @@ describe('advertsDeleteAction', () => {
             };
             const store = createStore({api, history})();
             await store.dispatch(advertsDeleteAction(1));
-            const advertsDeleted = deleteAdvert(getState(), 1);                    
+            deleteAdvert(getState(), 1);                    
             const actions = store.getActions();
             expect(actions).toEqual([
                  {type: ADVERT_DELETED_REQUEST},

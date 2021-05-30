@@ -20,7 +20,10 @@ const logger = store => next => action => {
 
 
 const configureStore = ({ preloadedState, history }) => {
-    const middleware = [routerMiddleware(history),thunk.withExtraArgument({ api, history }), logger];
+    const middleware = [
+        routerMiddleware(history),
+        thunk.withExtraArgument({ api, history }),
+        logger];
     const store = createStore(
         combineReducers({...reducers, router: connectRouter(history)}),
         preloadedState,

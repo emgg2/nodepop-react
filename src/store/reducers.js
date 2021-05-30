@@ -16,7 +16,7 @@ import {
 
 } from './types';
 
-const initValue = {
+export const initValue = {
     auth: false,    
     ui: {
         isLoading: false,
