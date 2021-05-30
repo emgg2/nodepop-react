@@ -38,3 +38,46 @@ exports[`NEW ADVERT FORM snapshot testing 1`] = `
   </button>
 </form>
 `;
+
+exports[`NEW ADVERT FORM snapshot testing with button disabled 1`] = `
+<form
+  onSubmit={[Function]}
+>
+  <input
+    name="name"
+    onChange={[Function]}
+    value="Prod1"
+  />
+  <input
+    checked={true}
+    name="sale"
+    onChange={[Function]}
+    type="checkbox"
+  />
+  <input
+    name="price"
+    onChange={[Function]}
+    type="number"
+    value={20}
+  />
+  <SelectTags
+    multiple={true}
+    name="tags"
+    onChange={[Function]}
+    value={
+      Array [
+        "tag1",
+      ]
+    }
+  />
+  <InputFile
+    name="photo"
+    onChange={[Function]}
+  />
+  <button
+    disabled={false}
+  >
+    Save
+  </button>
+</form>
+`;
